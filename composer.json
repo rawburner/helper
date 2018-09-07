@@ -1,0 +1,24 @@
+{
+    "name": "rawburner/helper",
+    "description": "A collection of helper classes I am using in every project",
+    "type": "repository",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Keil",
+            "email": "alexander.keil80@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.2"
+    },
+	"autoload": {
+        "psr-4": {
+            "Rawburner\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    }
+}
