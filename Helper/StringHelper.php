@@ -11,6 +11,35 @@ class StringHelper
 {
 
     /**
+     * @param $xingUrl
+     * @author Alexander Keil (alexanderkeil80@gmail.com)
+     * @return string
+     */
+    public static function getProfileNameFromXingUrl($xingUrl){
+        preg_match('#www.xing.com\/profile\/(.*)\/?#', $xingUrl, $matches);
+        if(!is_array($matches) || !$matches[0] || !$matches[1]){
+            return '';
+        }
+        $matchedProfile = rtrim($matches[1], '/');
+        if(strpos($matchedProfile, '/')){
+            $matchedProfile = explode('/', $matchedProfile)[0];
+        }
+        return $matchedProfile;
+    }
+
+    /**
+     * @param $html
+     * @author Alexander Keil (alexanderkeil80@gmail.com)
+     * @return string
+     */
+    public static function htmlToText($html){
+        $output = str_replace(['<br>', '<br/>', '<br />'], "\n", $html);
+        $output = html_entity_decode($output);
+        return strip_tags($output);
+    }
+
+
+    /**
      * Cut text without split a word
      * @author Alexander Keil
      * @param $text
