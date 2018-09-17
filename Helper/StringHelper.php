@@ -15,7 +15,7 @@ class StringHelper
      * @return mixed|null|string|string[]
      */
     public static function convertSummernoteContent($content){
-        $content = html_entity_decode($content);
+        $content = urldecode($content);
         /** Editor hinterlässt viele Leerzeichen vor dem HTML */
         $content = trim($content);
         /** Internet-Explorer macht strong statt b */
