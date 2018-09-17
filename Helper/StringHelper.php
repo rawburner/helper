@@ -9,6 +9,23 @@ namespace Rawburner\Helper;
  */
 class StringHelper
 {
+    /**
+     * @param $content
+     * @author Alexander Keil (alexanderkeil80@gmail.com)
+     * @return mixed|null|string|string[]
+     */
+    public static function convertSummernoteContent($content){
+        $content = html_entity_decode($content);
+        /** Editor hinterlässt viele Leerzeichen vor dem HTML */
+        $content = trim($content);
+        /** Internet-Explorer macht strong statt b */
+        $content = str_replace('</strong>', '</b>', $content);
+        $content = preg_replace('`(<strong)([^\w])`i', "<b$2", $content);
+
+        /** Absätze zu Zeilenumbrüchen machen */
+        $content = str_replace(['<p>', '</p>'], ['',''], $content);
+        return $content;
+    }
 
     /**
      * @param $xingUrl
