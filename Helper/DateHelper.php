@@ -68,9 +68,9 @@ class DateHelper
      * @author Alexander Keil (alexanderkeil80@gmail.com)
      * @return bool
      */
-    public static function isDateInFuture($date, $format = 'Y-m-d'){
+    public static function isDateInFuture($date){
         $current_date = new \DateTime();
-        $check_date = \DateTime::createFromFormat($format, $date);
+        $check_date = self::convertDateStringToObject($date);
 
         return $check_date > $current_date;
     }
