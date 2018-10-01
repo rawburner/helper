@@ -11,7 +11,9 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": "^7.1"
+        "php": "^7.1",
+        "beberlei/assert": "^2.9",
+        "symfony/expression-language": "^3.3|^4.0",
     },
 	"autoload": {
         "psr-4": {

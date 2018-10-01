@@ -2,27 +2,39 @@
 
 namespace Rawburner\Helper;
 
-use App\Entity\Clearing;
 use Assert\Assertion;
 
 /**
  * Class DateHelper
- * @author Alexander Keil (alexanderkeil80@gmail.com)
+ * @author Alexander Keil (alexanderkeil@leik-software.com)
  * @package Rawburner\Helper
  */
 class DateHelper
 {
-
     /**
-     * @param $clearing Clearing
-     * @return mixed|string
+     * Ermittelt die Werktage zwischen zwei Datumswerten
+     * @param $startDate
+     * @param $endDate
+     * @author Alexander Keil
+     * @return array|\DateTime[]
+     * @throws \Exception
      */
-    public static function getTimeRangeInMonths($clearing){
-        if($clearing->getFirstDay()->format('n') == $clearing->getLastDay()->format('n')){
-            return self::getMonthGermanFormat($clearing->getFirstDay()->format('n'));
+    public static function getWeekdaysBetweenDates($startDate, $endDate){
+        $weekDays = [];
+        $period = new \DatePeriod(
+            self::convertDateStringToObject($startDate),
+            new \DateInterval('P1D'),
+            self::convertDateStringToObject($endDate)->setTime(23,59,59)
+        );
+
+        /** @var \DateTime $date */
+        foreach ($period as $date){
+            if(in_array($date->format('N'), [6,7])){
+                continue;
+            }
+            $weekDays[]=$date;
         }
-        return self::getMonthGermanFormat($clearing->getFirstDay()->format('n')).' - '.
-            self::getMonthGermanFormat($clearing->getLastDay()->format('n'));
+        return $weekDays;
     }
 
     /**
@@ -70,7 +82,9 @@ class DateHelper
      */
     public static function isDateInFuture($date){
         $current_date = new \DateTime();
+        $current_date->setTime(0,0,0);
         $check_date = self::convertDateStringToObject($date);
+        $check_date->setTime(0,0,0);
 
         return $check_date > $current_date;
     }
@@ -83,17 +97,9 @@ class DateHelper
      * @return bool
      */
     public static function isSameDateTime($datetime1, $datetime2, $format = 'd.m.Y'){
-        if(!$datetime1 || !$datetime2){
-            return false;
-        }
-        if(!($datetime1 instanceof \DateTime)){
-            $datetime1 = new \DateTime($datetime1);
-        }
-
-        if(!($datetime2 instanceof \DateTime)){
-            $datetime2 = new \DateTime($datetime2);
-        }
-        if(!$datetime1 || !$datetime2){
+        $datetime1 = self::convertDateStringToObject($datetime1);
+        $datetime2 = self::convertDateStringToObject($datetime2);
+        if(!$datetime1 || $datetime2){
             return false;
         }
         return $datetime1->format($format) == $datetime2->format($format);
@@ -110,7 +116,6 @@ class DateHelper
             return $dateString;
         }
         try{
-            Assertion::false($dateString instanceof \DateTime);
             Assertion::notEmpty($dateString);
             $timestamp = strtotime($dateString);
             Assertion::notEq($timestamp, false, 'Datumsangabe konnte nicht validiert werden: '.$dateString);

@@ -3,16 +3,16 @@
 namespace Rawburner\Helper;
 
 /**
- * Eine Sammlung von oft gebrauchten Text-Funktionen
- * Class TextOperations
- * @package CommonBundle\Helper
+ * Class StringHelper
+ * @author Alexander Keil (alexanderkeil@leik-software.com)
+ * @package Rawburner\Helper
  */
 class StringHelper
 {
     /**
      * @param $content
-     * @author Alexander Keil (alexanderkeil80@gmail.com)
-     * @return mixed|null|string|string[]
+     * @author Alexander Keil
+     * @return string
      */
     public static function convertSummernoteContent($content){
         $content = urldecode($content);

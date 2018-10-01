@@ -4,7 +4,7 @@ namespace Rawburner\Helper;
 
 /**
  * Class QueryHelper
- * @author Alexander Keil (alexanderkeil80@gmail.com)
+ * @author Alexander Keil (alexanderkeil@leik-software.com)
  * @package App\Helper
  */
 class QueryHelper
@@ -12,7 +12,7 @@ class QueryHelper
 
     /**
      * @param $tableAlias
-     * @author Alexander Keil (alexanderkeil80@gmail.com)
+     * @author Alexander Keil
      * @return string
      */
     public static function getActiveSelection($tableAlias){
