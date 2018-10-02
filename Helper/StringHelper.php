@@ -9,6 +9,34 @@ namespace Rawburner\Helper;
  */
 class StringHelper
 {
+
+    /**
+     * @param string ...$paths
+     * @author Alexander Keil
+     * @return string
+     */
+    public static function makeValidPath(string ...$paths){
+        $outputPath = '';
+        foreach ($paths as $path){
+            if(!$outputPath){
+                $outputPath = rtrim($path, '/');
+                continue;
+            }
+            $outputPath .= '/'.trim($path, '/');
+        }
+        return $outputPath;
+    }
+
+    /**
+     * @see https://stackoverflow.com/a/3997367/5884988
+     * @param $string
+     * @author Alexander Keil
+     * @return array[]|false|string[]
+     */
+    public static function explodeByNewLine($string){
+        return preg_split('/\r\n|\r|\n/', $string);
+    }
+
     /**
      * @param $content
      * @author Alexander Keil
