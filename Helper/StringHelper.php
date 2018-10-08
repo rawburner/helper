@@ -33,8 +33,21 @@ class StringHelper
      * @author Alexander Keil
      * @return array[]|false|string[]
      */
-    public static function explodeByNewLine($string){
+    public static function explodeByNewLine(string $string){
         return preg_split('/\r\n|\r|\n/', $string);
+    }
+
+    /**
+     * @param string $string
+     * @author Alexander Keil
+     * @return array[]|false|string[]
+     */
+    public static function explodeByComma(string $string){
+        $strings = preg_split('/;|,/', $string);
+        array_walk($strings, function (&$var){
+            $var = trim($var);
+        });
+        return $strings;
     }
 
     /**
