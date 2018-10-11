@@ -64,7 +64,7 @@ class StringHelper
         $content = preg_replace('`(<strong)([^\w])`i', "<b$2", $content);
 
         /** Absätze zu Zeilenumbrüchen machen */
-        $content = str_replace(['<p>', '</p>'], ['',''], $content);
+        $content = str_replace(['<p>', '</p>'], ['<br>',''], $content);
         return $content;
     }
 
