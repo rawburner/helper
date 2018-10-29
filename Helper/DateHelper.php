@@ -3,23 +3,20 @@
 namespace Rawburner\Helper;
 
 use Assert\Assertion;
+use Nette\Utils\DateTime;
 
 /**
- * Class DateHelper
  * @author Alexander Keil (alexanderkeil@leik-software.com)
  * @package Rawburner\Helper
  */
-class DateHelper
+class DateHelper extends DateTime
 {
     /**
      * Ermittelt die Werktage zwischen zwei Datumswerten
-     * @param $startDate
-     * @param $endDate
-     * @author Alexander Keil
-     * @return array|\DateTime[]
-     * @throws \Exception
+     * @param string|\DateTime $startDate
+     * @param string|\DateTime $endDate
      */
-    public static function getWeekdaysBetweenDates($startDate, $endDate){
+    public static function getWeekdaysBetweenDates($startDate, $endDate):array{
         $weekDays = [];
         $period = new \DatePeriod(
             self::convertDateStringToObject($startDate),
@@ -37,11 +34,7 @@ class DateHelper
         return $weekDays;
     }
 
-    /**
-     * @param $number
-     * @return mixed
-     */
-    public static function getMonthGermanFormat($number){
+    public static function getMonthGermanFormat(string $number):string{
         $arMonths = [
             1 => 'Januar',
             2 => 'Februar',
@@ -62,25 +55,19 @@ class DateHelper
     }
 
     /**
-     * @param $date
-     * @param string $format
-     * @author Alexander Keil (alexanderkeil80@gmail.com)
-     * @return bool
+     * @param string|\DateTime $date
      * @see https://stackoverflow.com/questions/19271381/correctly-determine-if-date-string-is-a-valid-date-in-that-format
      */
-    public static function isDateValid($date, $format = 'Y-m-d')
+    public static function isDateValid($date, string $format = 'Y-m-d'):bool
     {
         $d = \DateTime::createFromFormat($format, $date);
         return $d && $d->format($format) === $date;
     }
 
     /**
-     * @param $date
-     * @param string $format
-     * @author Alexander Keil (alexanderkeil80@gmail.com)
-     * @return bool
+     * @param string|\DateTime $date
      */
-    public static function isDateInFuture($date){
+    public static function isDateInFuture($date):bool{
         $current_date = new \DateTime();
         $current_date->setTime(0,0,0);
         $check_date = self::convertDateStringToObject($date);
@@ -90,13 +77,10 @@ class DateHelper
     }
 
     /**
-     * Datum vergleichen
-     * @param $datetime1
-     * @param $datetime2
-     * @param string $format
-     * @return bool
+     * @param string|\DateTime $datetime1
+     * @param string|\DateTime $datetime2
      */
-    public static function isSameDateTime($datetime1, $datetime2, $format = 'd.m.Y'){
+    public static function isSameDateTime($datetime1, $datetime2, string $format = 'd.m.Y'):bool {
         $datetime1 = self::convertDateStringToObject($datetime1);
         $datetime2 = self::convertDateStringToObject($datetime2);
         if(!$datetime1 || $datetime2){
@@ -107,23 +91,17 @@ class DateHelper
 
     /**
      * Konvertiert einen String in ein DateTime-Objekt
-     * @param $dateString
-     * @author Alexander Keil (alexanderkeil80@gmail.com)
-     * @return bool|\DateTime|null
+     * @param string|\DateTime $dateString
      */
-    public static function convertDateStringToObject($dateString){
+    public static function convertDateStringToObject($dateString):\DateTime{
         if($dateString instanceof \DateTime){
             return $dateString;
         }
-        try{
-            Assertion::notEmpty($dateString);
-            $timestamp = strtotime($dateString);
-            Assertion::notEq($timestamp, false, 'Datumsangabe konnte nicht validiert werden: '.$dateString);
-            $dateTime = new \DateTime();
-            $dateTime->setTimestamp($timestamp);
-            return $dateTime;
-        }catch (\Throwable $exception){
-            return null;
-        }
+        Assertion::notEmpty($dateString);
+        $timestamp = strtotime($dateString);
+        Assertion::notEq($timestamp, false, 'Datumsangabe konnte nicht validiert werden: '.$dateString);
+        $dateTime = new \DateTime();
+        $dateTime->setTimestamp($timestamp);
+        return $dateTime;
     }
 }

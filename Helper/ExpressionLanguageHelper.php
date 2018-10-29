@@ -5,7 +5,6 @@ namespace Rawburner\Helper;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
- * Class ExpressionLanguageHelper
  * @author Alexander Keil (alexanderkeil80@gmail.com)
  * @package Rawburner\Helper
  */
@@ -29,10 +28,6 @@ class ExpressionLanguageHelper
         $this->addSubstrFunction();
     }
 
-    /**
-     * CB2B-220 substr hinzufügen, damit die Nummer gesplittet werden kann (ara)
-     * @author Alexander Keil (alexanderkeil80@gmail.com)
-     */
     protected function addSubstrFunction(){
         $this->expressionLanguage->register('substr', function ($str) {
             return sprintf('(is_string(%1$s) ? substr(%1$s) : %1$s)', $str);
@@ -45,12 +40,9 @@ class ExpressionLanguageHelper
     }
 
     /**
-     * @param $expression
-     * @param array $params
-     * @author Alexander Keil (alexanderkeil80@gmail.com)
-     * @return string
+     * @return mixed
      */
-    public function evaluate($expression, array $params){
+    public function evaluate(string $expression, array $params){
         return $this->expressionLanguage->evaluate($expression, $params);
     }
 }

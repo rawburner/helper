@@ -2,20 +2,16 @@
 
 namespace Rawburner\Helper;
 
+use Nette\Utils\Strings;
+
 /**
- * Class StringHelper
  * @author Alexander Keil (alexanderkeil@leik-software.com)
  * @package Rawburner\Helper
  */
-class StringHelper
+class StringHelper extends Strings
 {
 
-    /**
-     * @param string ...$paths
-     * @author Alexander Keil
-     * @return string
-     */
-    public static function makeValidPath(string ...$paths){
+    public static function makeValidPath(string ...$paths):string{
         $outputPath = '';
         foreach ($paths as $path){
             if(!$outputPath){
@@ -29,20 +25,12 @@ class StringHelper
 
     /**
      * @see https://stackoverflow.com/a/3997367/5884988
-     * @param $string
-     * @author Alexander Keil
-     * @return array[]|false|string[]
      */
-    public static function explodeByNewLine(string $string){
+    public static function explodeByNewLine(string $string):array{
         return preg_split('/\r\n|\r|\n/', $string);
     }
 
-    /**
-     * @param string $string
-     * @author Alexander Keil
-     * @return array[]|false|string[]
-     */
-    public static function explodeByComma(string $string){
+    public static function explodeByComma(string $string):array {
         $strings = preg_split('/;|,/', $string);
         array_walk($strings, function (&$var){
             $var = trim($var);
@@ -50,12 +38,7 @@ class StringHelper
         return $strings;
     }
 
-    /**
-     * @param $content
-     * @author Alexander Keil
-     * @return string
-     */
-    public static function convertSummernoteContent($content){
+    public static function convertSummernoteContent(string $content):string{
         $content = urldecode($content);
         /** Editor hinterlässt viele Leerzeichen vor dem HTML */
         $content = trim($content);
@@ -68,12 +51,7 @@ class StringHelper
         return $content;
     }
 
-    /**
-     * @param $xingUrl
-     * @author Alexander Keil (alexanderkeil80@gmail.com)
-     * @return string
-     */
-    public static function getProfileNameFromXingUrl($xingUrl){
+    public static function getProfileNameFromXingUrl(string $xingUrl):string{
         preg_match('#www.xing.com\/profile\/(.*)\/?#', $xingUrl, $matches);
         if(!is_array($matches) || !$matches[0] || !$matches[1]){
             return '';
@@ -85,26 +63,14 @@ class StringHelper
         return $matchedProfile;
     }
 
-    /**
-     * @param $html
-     * @author Alexander Keil (alexanderkeil80@gmail.com)
-     * @return string
-     */
-    public static function htmlToText($html){
+    public static function htmlToText(string $html):string{
         $output = str_replace(['<br>', '<br/>', '<br />'], "\n", $html);
         $output = html_entity_decode($output);
         return strip_tags($output);
     }
 
 
-    /**
-     * Cut text without split a word
-     * @author Alexander Keil
-     * @param $text
-     * @param $len
-     * @return mixed
-     */
-    public static function subStrWordWrap($text, $len){
+    public static function subStrWordWrap(string $text, int $len):string{
         if(strlen($text) > $len) {
             $text = str_replace(["\n\r", "\r\n", "\n", "\r"], " ", $text);
             $matches = [];
@@ -120,10 +86,8 @@ class StringHelper
      * Parse address and split street and housenumber
      * Taken from DHL Intraship
      * @see https://github.com/quafzi/magento-dhl-intraship/blob/official/app/code/community/Dhl/Intraship/Helper/Data.php
-     * @param $street
-     * @return array
      */
-    public static function splitStreet($street)
+    public static function splitStreet(string $street):array
     {
         /*
          * first pattern  | street_name             | required | ([^0-9]+)         | all characters != 0-9
@@ -159,64 +123,31 @@ class StringHelper
     }
 
 
-    /**
-     * Filter not allowed HTML Tags
-     * @author Alexander Keil
-     * @param $text
-     * @return string
-     */
-    public static function filterHTMLText($text){
+    public static function filterHTMLText(string $text): string{
         $filteredText = strip_tags($text, '<p><h2><h3><h4><h5><h6><br><br/><ul><ol><li><i><em><a><strong><b><u>');
         return $filteredText;
     }
 
-    /**
-     * Clear the filename from special chars
-     * @author Alexander Keil
-     * @param $filename
-     * @return mixed
-     */
-    public static function makeValidFilename($filename){
+    public static function makeValidFilename(string $filename):string{
         $translitTable = TranslitTable::getTranlitTable();
         $filename = str_replace(array_keys($translitTable), array_values($translitTable), $filename);
         return preg_replace('/[^A-Za-z0-9_.-]/', '_', $filename);
     }
 
-    /**
-     * Filtert einen Suchbegriff, um fehlerhafte URLs zu vermeiden
-     * @param $sword
-     * @return string
-     */
-    public static function filterSword($sword)
+    public static function filterSword(string $sword):string
     {
         $sword = trim(strip_tags(htmlspecialchars_decode(stripslashes($sword))));
-
         return str_replace('/', ' ', $sword);
     }
 
 
-    /**
-     * @param $bytes
-     * @param int $decimals
-     * @author Alexander Keil (alexanderkeil80@gmail.com)
-     * @return string
-     */
-    public static function human_filesize($bytes, $decimals = 2) {
+    public static function human_filesize(string $bytes, ?int $decimals = 2):string {
         $sz = 'BKMGTP';
         $factor = floor((strlen($bytes) - 1) / 3);
         return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . $sz[$factor];
     }
 
-    /**
-     * @param string $string
-     * @param string $row_delimiter
-     * @param string $delimiter
-     * @param string $enclosure
-     * @param string $escape
-     * @author Alexander Keil (alexanderkeil80@gmail.com)
-     * @return array
-     */
-    public static function csv_to_array($string='', $row_delimiter=PHP_EOL, $delimiter = "," , $enclosure = '"' , $escape = "\\" )
+    public static function csv_to_array(string $string='', string $row_delimiter=PHP_EOL, string $delimiter = "," , string $enclosure = '"' , string$escape = "\\" ):array
     {
         $rows = array_filter(explode($row_delimiter, $string));
         $header = NULL;
@@ -232,12 +163,7 @@ class StringHelper
         return $data;
     }
 
-    /**
-     * @see https://webdevwonders.com/lzw-compression-and-decompression-with-javascript-and-php/
-     * @param $compressed
-     * @return null|string
-     */
-    public static function decompress($compressed) {
+    public static function decompress(string $compressed):string {
         $compressed = explode(",", $compressed);
         $dictSize = 256;
         $dictionary = [];
@@ -262,12 +188,7 @@ class StringHelper
         return $result;
     }
 
-    /**
-     * @param $string
-     * @param $index
-     * @return int|string
-     */
-    public static function charAt($string, $index){
+    public static function charAt(string $string, $index):int{
         if($index < mb_strlen($string)){
             return mb_substr($string, $index, 1);
         } else{
