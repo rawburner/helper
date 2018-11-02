@@ -12,10 +12,8 @@ class NumberHelper
 
     /**
      * Entnommen aus Shopware
-     * @param $price
-     * @return float|mixed|string
      */
-    public static function formatPrice($price)
+    public static function formatPrice(string $price):string
     {
         $price = str_replace(',', '.', $price);
         $price = self::round($price);
@@ -42,12 +40,10 @@ class NumberHelper
     }
 
     /**
-     * Erstellt aus beliebigen Zahlen ein richtiges float
      * @see http://php.net/manual/de/function.floatval.php#114486
-     * @param $num
-     * @return float
+     * @param mixed $num
      */
-    public static function tofloat($num){
+    public static function tofloat($num):float{
         if(!$num){
             return 0.0;
         }
@@ -69,10 +65,9 @@ class NumberHelper
 
     /**
      * Entnommen aus Shopware
-     * @param null $moneyfloat
-     * @return float
+     * @param mixed $moneyfloat
      */
-    public static function round($moneyfloat = null)
+    public static function round($moneyfloat = null):float
     {
         if (is_numeric($moneyfloat)) {
             $moneyfloat = sprintf('%F', $moneyfloat);

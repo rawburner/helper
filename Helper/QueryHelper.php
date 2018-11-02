@@ -5,19 +5,13 @@ namespace Rawburner\Helper;
 use Doctrine\Common\Collections\Criteria;
 
 /**
- * Class QueryHelper
  * @author Alexander Keil (alexanderkeil@leik-software.com)
  * @package App\Helper
  */
 class QueryHelper
 {
 
-    /**
-     * @param $tableAlias
-     * @author Alexander Keil
-     * @return string
-     */
-    public static function getActiveSelection($tableAlias){
+    public static function getActiveSelection(string $tableAlias):string {
         $today = date('Y-m-d H:i:s');
         return
             sprintf(
@@ -27,10 +21,6 @@ class QueryHelper
             );
     }
 
-    /**
-     * @author Alexander Keil
-     * @return Criteria
-     */
     public static function getVisibleCriteria(): Criteria{
         $criteria = Criteria::create()
             ->where(Criteria::expr()->eq('deleted', false))
@@ -38,10 +28,6 @@ class QueryHelper
         return $criteria;
     }
 
-    /**
-     * @author Alexander Keil
-     * @return Criteria
-     */
     public static function getActiveCriteria(): Criteria{
         $criteria = Criteria::create()
             ->where(Criteria::expr()->eq('deleted', false));

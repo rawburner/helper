@@ -3,19 +3,20 @@
 namespace Rawburner\Helper;
 
 use Assert\Assertion;
+use Nette\Utils\DateTime;
 
 /**
  * @author Alexander Keil (alexanderkeil@leik-software.com)
  */
-class DateHelper
+class DateHelper extends DateTime
 {
     /**
      * Ermittelt die Werktage zwischen zwei Datumswerten.
      *
-     * @param $startDate
-     * @param $endDate
+     * @param \DateTime|string $startDate
+     * @param \DateTime|string $endDate
      */
-    public static function getWeekdaysBetweenDates($startDate, $endDate):array
+    public static function getWeekdaysBetweenDates($startDate, $endDate): array
     {
         $weekDays = [];
         $period = new \DatePeriod(
@@ -35,7 +36,7 @@ class DateHelper
         return $weekDays;
     }
 
-    public static function getMonthGermanFormat(string $number):string
+    public static function getMonthGermanFormat(string $number): string
     {
         $arMonths = [
             1 => 'Januar',
@@ -56,12 +57,11 @@ class DateHelper
     }
 
     /**
-     * @param $date
-     * @param string $format
+     * @param \DateTime|string $date
      *
      * @see https://stackoverflow.com/questions/19271381/correctly-determine-if-date-string-is-a-valid-date-in-that-format
      */
-    public static function isDateValid($date, $format = 'Y-m-d'): bool
+    public static function isDateValid($date, string $format = 'Y-m-d'): bool
     {
         $d = \DateTime::createFromFormat($format, $date);
 
@@ -69,7 +69,7 @@ class DateHelper
     }
 
     /**
-     * @param string|\DateTime $date
+     * @param \DateTime|string $date
      */
     public static function isDateInFuture($date): bool
     {
@@ -82,10 +82,10 @@ class DateHelper
     }
 
     /**
-     * @param string|\DateTime $datetime1
-     * @param string|\DateTime $datetime2
+     * @param \DateTime|string $datetime1
+     * @param \DateTime|string $datetime2
      */
-    public static function isSameDateTime($datetime1, $datetime2, ?string $format = 'd.m.Y'): bool
+    public static function isSameDateTime($datetime1, $datetime2, string $format = 'd.m.Y'): bool
     {
         $datetime1 = self::convertDateStringToObject($datetime1);
         $datetime2 = self::convertDateStringToObject($datetime2);
@@ -97,6 +97,8 @@ class DateHelper
     }
 
     /**
+     * Konvertiert einen String in ein DateTime-Objekt.
+     *
      * @param \DateTime|string $dateString
      */
     public static function convertDateStringToObject($dateString): ?\DateTime
@@ -104,17 +106,16 @@ class DateHelper
         if ($dateString instanceof \DateTime) {
             return $dateString;
         }
-
-        try {
-            Assertion::notEmpty($dateString, sprintf('String given in "%s" is empty', __METHOD__));
+        try{
+            Assertion::notEmpty($dateString);
             $timestamp = strtotime($dateString);
-            Assertion::notEq($timestamp, false, sprintf('DateString is not valid: "%s"', $dateString));
+            Assertion::notEq($timestamp, false, 'Datumsangabe konnte nicht validiert werden: '.$dateString);
             $dateTime = new \DateTime();
             $dateTime->setTimestamp($timestamp);
-
             return $dateTime;
-        } catch (\Throwable $exception) {
+        }catch(\Throwable $exception){
             return null;
         }
+
     }
 }
