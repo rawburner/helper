@@ -142,8 +142,8 @@ class StringHelper extends Strings
 
 
     public static function human_filesize(string $bytes, ?int $decimals = 2):string {
-        $sz = 'BKMGTP';
-        $factor = floor((strlen($bytes) - 1) / 3);
+        $sz = ['Byte','KB','MB','GB','TB','PB'];
+        $factor = (int)floor((strlen($bytes) - 1) / 3);
         return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . $sz[$factor];
     }
 
