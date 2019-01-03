@@ -6,7 +6,6 @@ use Nette\Utils\Strings;
 
 /**
  * @author Alexander Keil (alexanderkeil@leik-software.com)
- * @package Rawburner\Helper
  */
 class StringHelper extends Strings
 {
@@ -47,7 +46,7 @@ class StringHelper extends Strings
         $content = preg_replace('`(<strong)([^\w])`i', "<b$2", $content);
 
         /** Absätze zu Zeilenumbrüchen machen */
-        $content = str_replace(['<p>', '</p>'], ['<br>',''], $content);
+        $content = str_replace(['<p>', '</p>'], ['','<br>'], $content);
         return $content;
     }
 
@@ -97,29 +96,22 @@ class StringHelper extends Strings
          * ignore         |                         |          | [, \t]*           | comma, white spaces and tabs
          * third pattern  | care_of                 | optional | ([^0-9]+.*)?      | all characters != 0-9 + any character except newline
          */
-
-        preg_match("/^([^0-9]+)[ \t]*([-\w^.]+)[, \t]*([^0-9]+.*)?\$/", $street, $matches);
-        unset($matches[0]);
-        $parts = array_reverse($matches);
-
-        $current = 'care_of';
-        $splittedStreet = [
-            'street_name'   => '',
+        if (preg_match("/^([^0-9]+)([0-9]+[ ])*[ \t]*([0-9]*[-\w^.]*)?[, \t]*([^0-9]+.*)?\$/", $street, $matches)) {
+            //check if street has additional value and add it to streetname
+            if (preg_match("/^([0-9]+)?\$/", trim($matches[2]))) {
+                $matches[1] = $matches[1] . $matches[2];
+            }
+            return [
+                'street_name'   => trim($matches[1]),
+                'street_number' => isset($matches[3]) ? $matches[3] : '',
+                'care_of'       => isset($matches[4]) ? trim($matches[4]) : ''
+            ];
+        }
+        return [
+            'street_name'   => $street,
             'street_number' => '',
             'care_of'       => ''
         ];
-        foreach ($parts as $value) {
-            if ('care_of' == $current) {
-                if (is_numeric(substr($value, 0, 1))) {
-                    $current = 'street_number';
-                }
-            }
-            if ('street_number' == $current && false === is_numeric(substr($value, 0, 1))) {
-                $current = 'street_name';
-            }
-            $splittedStreet[$current] = trim($value . ' ' . $splittedStreet[$current]);
-        }
-        return $splittedStreet;
     }
 
 
