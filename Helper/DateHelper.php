@@ -68,9 +68,6 @@ class DateHelper extends DateTime
         return $d && $d->format($format) === $date;
     }
 
-    /**
-     * @param \DateTime|string $date
-     */
     public static function isDateInFuture($date): bool
     {
         $current_date = new \DateTime();
@@ -96,26 +93,20 @@ class DateHelper extends DateTime
         return $datetime1->format($format) === $datetime2->format($format);
     }
 
-    /**
-     * Konvertiert einen String in ein DateTime-Objekt.
-     *
-     * @param \DateTime|string $dateString
-     */
-    public static function convertDateStringToObject($dateString): ?\DateTime
+    public static function convertDateStringToObject($dateString, string $format = 'Y-m-d'): ?\DateTime
     {
         if ($dateString instanceof \DateTime) {
             return $dateString;
         }
-        try{
+
+        try {
             Assertion::notEmpty($dateString);
-            $timestamp = strtotime($dateString);
-            Assertion::notEq($timestamp, false, 'Datumsangabe konnte nicht validiert werden: '.$dateString);
-            $dateTime = new \DateTime();
-            $dateTime->setTimestamp($timestamp);
+            $dateTime = \DateTime::createFromFormat($format, $dateString);
+
+
             return $dateTime;
-        }catch(\Throwable $exception){
+        } catch (\Throwable $exception) {
             return null;
         }
-
     }
 }
