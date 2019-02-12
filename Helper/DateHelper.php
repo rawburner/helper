@@ -86,14 +86,14 @@ class DateHelper extends DateTime
     {
         $datetime1 = self::convertDateStringToObject($datetime1);
         $datetime2 = self::convertDateStringToObject($datetime2);
-        if (!$datetime1 || $datetime2) {
+        if (!$datetime1 || !$datetime2) {
             return false;
         }
 
         return $datetime1->format($format) === $datetime2->format($format);
     }
 
-    public static function convertDateStringToObject($dateString, string $format = 'Y-m-d'): ?\DateTime
+    public static function convertDateStringToObject($dateString, ?string $format = null): ?\DateTime
     {
         if ($dateString instanceof \DateTime) {
             return $dateString;
@@ -101,8 +101,11 @@ class DateHelper extends DateTime
 
         try {
             Assertion::notEmpty($dateString);
-            $dateTime = \DateTime::createFromFormat($format, $dateString);
-
+            if($format){
+                $dateTime = \DateTime::createFromFormat($format, $dateString);
+            }else{
+                $dateTime = new \DateTime($dateString);
+            }
 
             return $dateTime;
         } catch (\Throwable $exception) {
