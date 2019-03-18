@@ -52,7 +52,12 @@ class StringHelper extends Strings
         $content = preg_replace('`(<strong)([^\w])`i', '<b$2', $content);
 
         /** Absätze zu Zeilenumbrüchen machen */
-        return str_replace(['<p>', '</p>'], ['', '<br>'], $content);
+        $content = str_replace(['<p>', '</p>'], ['','<br>'], $content);
+
+        /** entfernen von leeren tags, können auch Attribute enthalten */
+        $content = preg_replace("/<p[^>]*(?:\/>|>(?:\s|&nbsp;|﻿)*<\/p>)/m", '', $content);
+        $content = preg_replace("/<span[^>]*(?:\/>|>(?:\s|&nbsp;)*<\/span>)/m", '', $content);
+        return $content;
     }
 
     public static function getProfileNameFromXingUrl(string $xingUrl): string
