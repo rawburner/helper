@@ -172,7 +172,7 @@ class StringHelper extends Strings
             $row = str_getcsv($row, $delimiter, $enclosure, $escape);
             if (!$header) {
                 $header = $row;
-            } else {
+            } elseif(count($row)===count($header)) {
                 $data[] = array_combine($header, $row);
             }
         }
