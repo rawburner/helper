@@ -62,8 +62,11 @@ class StringHelper extends Strings
 
     public static function getProfileNameFromXingUrl(string $xingUrl): string
     {
+        if($xingUrl){
+            return '';
+        }
         preg_match('#www.xing.com\/profile\/(.*)\/?#', $xingUrl, $matches);
-        if (!\is_array($matches) || !$matches[0] || !$matches[1]) {
+        if (!count($matches)) {
             return '';
         }
         $matchedProfile = rtrim($matches[1], '/');
