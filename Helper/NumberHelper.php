@@ -3,47 +3,25 @@
 namespace Rawburner\Helper;
 
 /**
- * Class NumberHelper
- * @author Alexander Keil (alexanderkeil80@gmail.com)
- * @package Rawburner\Helper
+ * @author Alexander Keil (alexanderkeil@leik-software.com)
  */
 class NumberHelper
 {
 
-    /**
-     * Entnommen aus Shopware
-     */
-    public static function formatPrice(string $price):string
+    public static function formatPrice(float $price, ?int $minDecimals=2): string
     {
-        $price = str_replace(',', '.', $price);
-        $price = self::round($price);
-        $price = str_replace('.', ',', $price);
-        $commaPos = strpos($price, ',');
-        if ($commaPos) {
-            $part = substr($price, $commaPos + 1, strlen($price) - $commaPos);
-            switch (strlen($part)) {
-                case 1:
-                    $price .= '0';
-                    break;
-                case 2:
-                    break;
-            }
-        } else {
-            if (!$price) {
-                $price = '0';
-            } else {
-                $price .= ',00';
-            }
-        }
-
-        return $price;
+        //https://stackoverflow.com/a/14531760/5884988
+        $price = $price + 0;
+        $split = explode('.', $price);
+        return number_format($price, (isset($split[1]) && strlen($split[1]) > $minDecimals) ? strlen($split[1]) : $minDecimals, ',', '.');
     }
 
     /**
      * @see http://php.net/manual/de/function.floatval.php#114486
      * @param mixed $num
      */
-    public static function tofloat($num):float{
+    public static function tofloat($num):float
+    {
         if(!$num){
             return 0.0;
         }

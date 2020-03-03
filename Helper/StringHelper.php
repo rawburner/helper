@@ -52,13 +52,21 @@ class StringHelper extends Strings
         $content = preg_replace('`(<strong)([^\w])`i', '<b$2', $content);
 
         /** Absätze zu Zeilenumbrüchen machen */
-        return str_replace(['<p>', '</p>'], ['', '<br>'], $content);
+        $content = str_replace(['<p>', '</p>'], ['','<br>'], $content);
+
+        /** entfernen von leeren tags, können auch Attribute enthalten */
+        $content = preg_replace("/<p[^>]*(?:\/>|>(?:\s|&nbsp;|﻿)*<\/p>)/m", '', $content);
+        $content = preg_replace("/<span[^>]*(?:\/>|>(?:\s|&nbsp;)*<\/span>)/m", '', $content);
+        return $content;
     }
 
     public static function getProfileNameFromXingUrl(string $xingUrl): string
     {
+        if(!$xingUrl){
+            return '';
+        }
         preg_match('#www.xing.com\/profile\/(.*)\/?#', $xingUrl, $matches);
-        if (!\is_array($matches) || !$matches[0] || !$matches[1]) {
+        if (!count($matches)) {
             return '';
         }
         $matchedProfile = rtrim($matches[1], '/');
@@ -167,7 +175,7 @@ class StringHelper extends Strings
             $row = str_getcsv($row, $delimiter, $enclosure, $escape);
             if (!$header) {
                 $header = $row;
-            } else {
+            } elseif(count($row)===count($header)) {
                 $data[] = array_combine($header, $row);
             }
         }
